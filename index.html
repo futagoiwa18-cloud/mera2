@@ -26,7 +26,7 @@
     }
 
     .shell {
-      width: min(100vw, 1278px, calc(100vh * 16 / 9));
+      width: min(100vw, 1704px, calc(100vh * 16 / 9));
       aspect-ratio: 16 / 9;
       position: relative;
       background: #10131f;
@@ -105,7 +105,7 @@
 </head>
 <body>
   <main class="shell" aria-label="滅乱忍伝 game">
-    <canvas id="game" width="1278" height="720"></canvas>
+    <canvas id="game" width="1704" height="960"></canvas>
     <div class="touch" aria-hidden="true">
       <div class="pad">
         <button class="up" data-key="jump">↑</button>
@@ -126,7 +126,7 @@
       const canvas = document.getElementById("game");
       const ctx = canvas.getContext("2d");
       ctx.imageSmoothingEnabled = false;
-      ctx.setTransform(3, 0, 0, 3, 0, 0);
+      ctx.setTransform(4, 0, 0, 4, 0, 0);
 
       const W = 426;
       const H = 240;
@@ -167,9 +167,9 @@
 
       const player = {
         x: 38,
-        y: 174,
-        w: 17,
-        h: 30,
+        y: 166,
+        w: 26,
+        h: 48,
         vx: 0,
         vy: 0,
         dir: 1,
@@ -282,7 +282,7 @@
         audio.startBgm();
         Object.assign(player, {
           x: 38,
-          y: 174,
+          y: 166,
           vx: 0,
           vy: 0,
           dir: 1,
@@ -385,10 +385,10 @@
         if (player.inv > 0) player.inv--;
 
         const slashRect = {
-          x: player.x + (player.dir > 0 ? 13 : -21),
-          y: player.y + 7,
-          w: 26,
-          h: 18
+          x: player.x + (player.dir > 0 ? 20 : -30),
+          y: player.y + 16,
+          w: 36,
+          h: 22
         };
 
         for (const e of enemies) {
@@ -841,72 +841,122 @@
         const x = Math.round(player.x - camera);
         const y = Math.round(player.y);
         const run = Math.abs(player.vx) > .35 && player.grounded ? Math.floor(time / 6) % 2 : 0;
-        const scarf = player.dir > 0 ? -9 : 17;
-        ctx.fillStyle = "#b72f3e";
-        ctx.fillRect(x + scarf, y + 8, 10, 4);
-        ctx.fillStyle = "#e04c55";
-        ctx.fillRect(x + scarf + (player.dir > 0 ? 1 : 2), y + 8.5, 6, .5);
-        drawActorMicroRect(x + scarf + (player.dir > 0 ? 2.33 : 3.33), y + 9.33, 4.33, .33, "#ff8188");
-        ctx.fillStyle = "#5d1724";
-        ctx.fillRect(x + scarf + (player.dir > 0 ? 0 : 7), y + 11.5, 3, .5);
-        ctx.fillStyle = "#161b25";
-        ctx.fillRect(x + 4, y + 5, 10, 20);
-        ctx.fillStyle = "#090b12";
-        ctx.fillRect(x + 3.5, y + 6, 1, 18);
-        ctx.fillRect(x + 13.5, y + 6, 1, 17);
-        ctx.fillStyle = "#283142";
-        ctx.fillRect(x + 6, y + 8, 6, 3);
-        ctx.fillRect(x + 5, y + 14, 8, 2);
-        ctx.fillStyle = "#3f4c62";
-        ctx.fillRect(x + 6.5, y + 8.5, 4.5, .5);
-        ctx.fillRect(x + 5.5, y + 16.5, 6.5, .5);
-        drawActorMicroRect(x + 5.33, y + 6.33, .33, 16.33, "#4f5d72");
-        drawActorMicroRect(x + 12.33, y + 7.33, .33, 14.33, "#070911");
-        drawActorMicroRect(x + 7.33, y + 12.33, 3.33, .33, "#718095");
-        drawActorMicroRect(x + 6.33, y + 18.33, 5.33, .33, "#080a11");
-        ctx.fillRect(x + 3, y + 23, 5, 7);
-        ctx.fillRect(x + 10, y + 23 + run, 5, 7 - run);
-        drawActorMicroRect(x + 4.33, y + 24.33, 2.33, .33, "#4b5870");
-        drawActorMicroRect(x + 11.33, y + 24.33 + run, 2.33, .33, "#4b5870");
-        drawActorMicroRect(x + 3.33, y + 29.33, 5, .33, "#05070c");
-        drawActorMicroRect(x + 10.33, y + 29.33, 5, .33, "#05070c");
-        ctx.fillStyle = "#333b4b";
-        ctx.fillRect(x + 5, y, 9, 8);
-        ctx.fillStyle = "#596779";
-        ctx.fillRect(x + 6, y + .5, 6, 1);
-        drawActorMicroRect(x + 6.33, y + 1.67, 6.33, .33, "#7b8798");
-        drawActorMicroRect(x + 5.33, y + 4.33, 8.33, .33, "#171b25");
-        ctx.fillStyle = "#11151f";
-        ctx.fillRect(x + 4.5, y + 1.5, 10, 1);
-        ctx.fillRect(x + 6.5, y + 6.5, 6, .5);
-        ctx.fillStyle = "#e9d39a";
-        ctx.fillRect(x + (player.dir > 0 ? 11 : 4), y + 3, 3, 2);
-        ctx.fillStyle = "#fff0bd";
-        ctx.fillRect(x + (player.dir > 0 ? 12.5 : 4), y + 3.5, 1, .5);
-        drawActorMicroRect(x + (player.dir > 0 ? 12.33 : 4.33), y + 4.33, .67, .33, "#4b2a1e");
-        ctx.fillStyle = "#7d8fa4";
-        ctx.fillRect(x + (player.dir > 0 ? 12 : -4), y + 11, 8, 3);
-        ctx.fillStyle = "#d7e0e6";
-        ctx.fillRect(x + (player.dir > 0 ? 15 : -1), y + 10.5, 5, .5);
-        drawActorMicroRect(x + (player.dir > 0 ? 15.33 : -0.67), y + 12.33, 4.33, .33, "#eff9ff");
+        const lean = player.grounded ? 0 : -2;
+        const faceX = player.dir > 0 ? x + 14 : x + 8;
+        const scabbardX = player.dir > 0 ? x + 3 : x + 18;
+
+        ctx.fillStyle = "rgba(0,0,0,.45)";
+        ctx.fillRect(x + 1, y + 46, 27, 3);
+
+        // Back sword and leather strap.
+        ctx.fillStyle = "#2b1d12";
+        ctx.fillRect(scabbardX, y + 7, 3, 31);
+        ctx.fillStyle = "#81705b";
+        ctx.fillRect(scabbardX + (player.dir > 0 ? 1 : -1), y + 6, 2, 5);
+        ctx.fillStyle = "#b99055";
+        ctx.fillRect(scabbardX + (player.dir > 0 ? 1 : -1), y + 3, 2, 3);
+        ctx.fillStyle = "#5a3e24";
+        ctx.fillRect(x + 7, y + 17, 17, 3);
+        ctx.fillStyle = "#7a5630";
+        ctx.fillRect(x + 10, y + 16, 12, 1);
+
+        // Hair silhouette, messy like the reference sheet.
+        ctx.fillStyle = "#0a0b0d";
+        ctx.fillRect(x + 7, y + 1, 13, 5);
+        ctx.fillRect(x + 5, y + 5, 18, 6);
+        ctx.fillRect(x + 6, y + 10, 16, 5);
+        ctx.fillRect(x + 4, y + 7, 3, 5);
+        ctx.fillRect(x + 21, y + 7, 3, 4);
+        ctx.fillStyle = "#202126";
+        ctx.fillRect(x + 8, y + 3, 4, 1);
+        ctx.fillRect(x + 14, y + 2, 3, 1);
+        ctx.fillRect(x + 18, y + 6, 3, 1);
+        drawActorMicroRect(x + 7.25, y + 4.25, 3.5, .25, "#34343a");
+        drawActorMicroRect(x + 13.25, y + 5.25, 4.5, .25, "#2b2c31");
+
+        // Face.
+        ctx.fillStyle = "#c58b54";
+        ctx.fillRect(x + 9, y + 9, 12, 10);
+        ctx.fillStyle = "#8d5633";
+        ctx.fillRect(x + 9, y + 16, 12, 3);
+        ctx.fillStyle = "#e6b16d";
+        ctx.fillRect(faceX, y + 10, 3, 2);
+        ctx.fillStyle = "#1a0e0b";
+        ctx.fillRect(x + 10, y + 12, 3, 1);
+        ctx.fillRect(x + 17, y + 12, 3, 1);
+        ctx.fillRect(x + 14, y + 16, 4, 1);
+        drawActorMicroRect(x + 11.25, y + 13.25, 1.5, .25, "#ffffff");
+        drawActorMicroRect(x + 18.25, y + 13.25, 1.25, .25, "#ffffff");
+        drawActorMicroRect(x + 15.25, y + 14.25, .5, 1.75, "#5c3324");
+
+        // Scarf and dark layered cloth.
+        ctx.fillStyle = "#171a20";
+        ctx.fillRect(x + 5, y + 17, 20, 7);
+        ctx.fillStyle = "#2d333d";
+        ctx.fillRect(x + 7, y + 18, 14, 2);
         ctx.fillStyle = "#0b0d12";
-        ctx.fillRect(x + 3, y + 26, 5, 1);
-        ctx.fillRect(x + 10, y + 26 + run, 5, 1);
+        ctx.fillRect(x + 5, y + 22, 20, 2);
+        ctx.fillStyle = "#202632";
+        ctx.fillRect(x + 4, y + 23, 22, 14);
+        ctx.fillStyle = "#303844";
+        ctx.fillRect(x + 6, y + 24, 16, 2);
+        ctx.fillRect(x + 8, y + 30, 12, 1);
+        ctx.fillStyle = "#11151d";
+        ctx.fillRect(x + 3, y + 26, 3, 10);
+        ctx.fillRect(x + 23, y + 26, 3, 10);
+        ctx.fillStyle = "#15191f";
+        ctx.fillRect(x + 7, y + 35, 16, 4);
+        ctx.fillStyle = "#6b4a29";
+        ctx.fillRect(x + 6, y + 36, 18, 2);
+        ctx.fillStyle = "#9a6c37";
+        ctx.fillRect(x + 12, y + 35, 5, 1);
+        drawActorMicroRect(x + 7.25, y + 25.25, 9.5, .25, "#596270");
+        drawActorMicroRect(x + 9.25, y + 28.25, 12.5, .25, "#11141b");
+        drawActorMicroRect(x + 6.25, y + 33.25, 15.5, .25, "#424b58");
+
+        // Arms and gloves.
+        const armY = y + 25 + lean;
+        ctx.fillStyle = "#252c35";
+        ctx.fillRect(x + 1, armY, 6, 12);
+        ctx.fillRect(x + 23, armY, 5, 12);
+        ctx.fillStyle = "#11141a";
+        ctx.fillRect(x + 1, armY + 8, 6, 4);
+        ctx.fillRect(x + 23, armY + 8, 5, 4);
+        ctx.fillStyle = "#a66e3e";
+        ctx.fillRect(x + 2, armY + 11, 4, 3);
+        ctx.fillRect(x + 24, armY + 11, 4, 3);
+        ctx.fillStyle = "#0b0c10";
+        ctx.fillRect(x + 2, armY + 14, 5, 2);
+        ctx.fillRect(x + 24, armY + 14, 5, 2);
+
+        // Baggy pants and boots.
+        ctx.fillStyle = "#202630";
+        ctx.fillRect(x + 6, y + 39, 8, 8 - run);
+        ctx.fillRect(x + 15, y + 39 + run, 8, 8 - run);
+        ctx.fillStyle = "#303844";
+        ctx.fillRect(x + 7, y + 40, 5, 1);
+        ctx.fillRect(x + 16, y + 40 + run, 5, 1);
+        ctx.fillStyle = "#0b0d11";
+        ctx.fillRect(x + 5, y + 46, 9, 3);
+        ctx.fillRect(x + 15, y + 46, 10, 3);
+        ctx.fillStyle = "#3f4550";
+        ctx.fillRect(x + 7, y + 47, 5, 1);
+        ctx.fillRect(x + 17, y + 47, 6, 1);
 
         if (player.slash > 0) {
           ctx.fillStyle = "#f7f0b8";
           if (player.dir > 0) {
-            ctx.fillRect(x + 17, y + 7, 18, 3);
-            ctx.fillRect(x + 27, y + 11, 9, 3);
-            ctx.fillRect(x + 19.5, y + 6.5, 13, .5);
-            drawActorMicroRect(x + 21.33, y + 7.33, 13.33, .33, "#ffffff");
-            drawActorMicroRect(x + 31.33, y + 12.33, 4.33, .33, "#c8d5d7");
+            ctx.fillRect(x + 22, y + 20, 30, 3);
+            ctx.fillRect(x + 37, y + 23, 14, 3);
+            ctx.fillRect(x + 25, y + 18, 20, 1);
+            drawActorMicroRect(x + 25.25, y + 20.25, 23.5, .25, "#ffffff");
+            drawActorMicroRect(x + 42.25, y + 24.25, 7.5, .25, "#c8d5d7");
           } else {
-            ctx.fillRect(x - 18, y + 7, 18, 3);
-            ctx.fillRect(x - 19, y + 11, 9, 3);
-            ctx.fillRect(x - 15.5, y + 6.5, 13, .5);
-            drawActorMicroRect(x - 16.33, y + 7.33, 13.33, .33, "#ffffff");
-            drawActorMicroRect(x - 18.33, y + 12.33, 4.33, .33, "#c8d5d7");
+            ctx.fillRect(x - 28, y + 20, 30, 3);
+            ctx.fillRect(x - 28, y + 23, 14, 3);
+            ctx.fillRect(x - 22, y + 18, 20, 1);
+            drawActorMicroRect(x - 25.25, y + 20.25, 23.5, .25, "#ffffff");
+            drawActorMicroRect(x - 27.25, y + 24.25, 7.5, .25, "#c8d5d7");
           }
         }
       }
@@ -1093,7 +1143,7 @@
           ctx.fillRect(338 + i * 12, 8, 8, 8);
         }
         ctx.fillStyle = "#a7b4c8";
-        ctx.fillText("16:9 1278x720", 172, 15);
+        ctx.fillText("16:9 1704x960", 172, 15);
         if (boss.awake && !boss.dead) {
           ctx.fillStyle = "#0b0d12";
           ctx.fillRect(126, 26, 174, 8);
