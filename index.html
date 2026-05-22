@@ -26,7 +26,7 @@
     }
 
     .shell {
-      width: min(100vw, 852px, calc(100vh * 16 / 9));
+      width: min(100vw, 1278px, calc(100vh * 16 / 9));
       aspect-ratio: 16 / 9;
       position: relative;
       background: #10131f;
@@ -105,7 +105,7 @@
 </head>
 <body>
   <main class="shell" aria-label="滅乱忍伝 game">
-    <canvas id="game" width="852" height="480"></canvas>
+    <canvas id="game" width="1278" height="720"></canvas>
     <div class="touch" aria-hidden="true">
       <div class="pad">
         <button class="up" data-key="jump">↑</button>
@@ -126,7 +126,7 @@
       const canvas = document.getElementById("game");
       const ctx = canvas.getContext("2d");
       ctx.imageSmoothingEnabled = false;
-      ctx.setTransform(2, 0, 0, 2, 0, 0);
+      ctx.setTransform(3, 0, 0, 3, 0, 0);
 
       const W = 426;
       const H = 240;
@@ -649,6 +649,16 @@
         ctx.fillRect(Math.round(x * 2) / 2, Math.round(y * 2) / 2, w, h);
       }
 
+      function drawMicroRect(x, y, w, h, c) {
+        ctx.fillStyle = c;
+        ctx.fillRect(Math.round((x - camera) * 3) / 3, Math.round(y * 3) / 3, w, h);
+      }
+
+      function drawActorMicroRect(x, y, w, h, c) {
+        ctx.fillStyle = c;
+        ctx.fillRect(Math.round(x * 3) / 3, Math.round(y * 3) / 3, w, h);
+      }
+
       function draw() {
         ctx.fillStyle = "#0a0e18";
         ctx.fillRect(0, 0, W, H);
@@ -778,6 +788,7 @@
           drawRect(s.x, s.y, s.w, s.h, "#30374a");
           drawRect(s.x, s.y, s.w, 4, "#9b9ba9");
           drawFineRect(s.x, s.y + 4.5, s.w, .5, "#e0e2ea");
+          drawMicroRect(s.x, s.y + 5.33, s.w, .33, "#ffffff");
           drawFineRect(s.x, s.y + 6, s.w, 1, "#6e7588");
           for (let x = s.x + 7; x < s.x + s.w; x += 9) {
             drawRect(x, s.y + 7, 7, 1, "#141a24");
@@ -835,6 +846,7 @@
         ctx.fillRect(x + scarf, y + 8, 10, 4);
         ctx.fillStyle = "#e04c55";
         ctx.fillRect(x + scarf + (player.dir > 0 ? 1 : 2), y + 8.5, 6, .5);
+        drawActorMicroRect(x + scarf + (player.dir > 0 ? 2.33 : 3.33), y + 9.33, 4.33, .33, "#ff8188");
         ctx.fillStyle = "#5d1724";
         ctx.fillRect(x + scarf + (player.dir > 0 ? 0 : 7), y + 11.5, 3, .5);
         ctx.fillStyle = "#161b25";
@@ -848,12 +860,22 @@
         ctx.fillStyle = "#3f4c62";
         ctx.fillRect(x + 6.5, y + 8.5, 4.5, .5);
         ctx.fillRect(x + 5.5, y + 16.5, 6.5, .5);
+        drawActorMicroRect(x + 5.33, y + 6.33, .33, 16.33, "#4f5d72");
+        drawActorMicroRect(x + 12.33, y + 7.33, .33, 14.33, "#070911");
+        drawActorMicroRect(x + 7.33, y + 12.33, 3.33, .33, "#718095");
+        drawActorMicroRect(x + 6.33, y + 18.33, 5.33, .33, "#080a11");
         ctx.fillRect(x + 3, y + 23, 5, 7);
         ctx.fillRect(x + 10, y + 23 + run, 5, 7 - run);
+        drawActorMicroRect(x + 4.33, y + 24.33, 2.33, .33, "#4b5870");
+        drawActorMicroRect(x + 11.33, y + 24.33 + run, 2.33, .33, "#4b5870");
+        drawActorMicroRect(x + 3.33, y + 29.33, 5, .33, "#05070c");
+        drawActorMicroRect(x + 10.33, y + 29.33, 5, .33, "#05070c");
         ctx.fillStyle = "#333b4b";
         ctx.fillRect(x + 5, y, 9, 8);
         ctx.fillStyle = "#596779";
         ctx.fillRect(x + 6, y + .5, 6, 1);
+        drawActorMicroRect(x + 6.33, y + 1.67, 6.33, .33, "#7b8798");
+        drawActorMicroRect(x + 5.33, y + 4.33, 8.33, .33, "#171b25");
         ctx.fillStyle = "#11151f";
         ctx.fillRect(x + 4.5, y + 1.5, 10, 1);
         ctx.fillRect(x + 6.5, y + 6.5, 6, .5);
@@ -861,10 +883,12 @@
         ctx.fillRect(x + (player.dir > 0 ? 11 : 4), y + 3, 3, 2);
         ctx.fillStyle = "#fff0bd";
         ctx.fillRect(x + (player.dir > 0 ? 12.5 : 4), y + 3.5, 1, .5);
+        drawActorMicroRect(x + (player.dir > 0 ? 12.33 : 4.33), y + 4.33, .67, .33, "#4b2a1e");
         ctx.fillStyle = "#7d8fa4";
         ctx.fillRect(x + (player.dir > 0 ? 12 : -4), y + 11, 8, 3);
         ctx.fillStyle = "#d7e0e6";
         ctx.fillRect(x + (player.dir > 0 ? 15 : -1), y + 10.5, 5, .5);
+        drawActorMicroRect(x + (player.dir > 0 ? 15.33 : -0.67), y + 12.33, 4.33, .33, "#eff9ff");
         ctx.fillStyle = "#0b0d12";
         ctx.fillRect(x + 3, y + 26, 5, 1);
         ctx.fillRect(x + 10, y + 26 + run, 5, 1);
@@ -875,10 +899,14 @@
             ctx.fillRect(x + 17, y + 7, 18, 3);
             ctx.fillRect(x + 27, y + 11, 9, 3);
             ctx.fillRect(x + 19.5, y + 6.5, 13, .5);
+            drawActorMicroRect(x + 21.33, y + 7.33, 13.33, .33, "#ffffff");
+            drawActorMicroRect(x + 31.33, y + 12.33, 4.33, .33, "#c8d5d7");
           } else {
             ctx.fillRect(x - 18, y + 7, 18, 3);
             ctx.fillRect(x - 19, y + 11, 9, 3);
             ctx.fillRect(x - 15.5, y + 6.5, 13, .5);
+            drawActorMicroRect(x - 16.33, y + 7.33, 13.33, .33, "#ffffff");
+            drawActorMicroRect(x - 18.33, y + 12.33, 4.33, .33, "#c8d5d7");
           }
         }
       }
@@ -894,6 +922,9 @@
         ctx.fillRect(x + 13.5, y + 8, 1, 12);
         ctx.fillStyle = e.hurt ? "#fff1a3" : "#8b3649";
         ctx.fillRect(x + 6.5, y + 7.5, 4, 10);
+        drawActorMicroRect(x + 7.33, y + 8.33, 2.67, .33, e.hurt ? "#ffffff" : "#b14b5c");
+        drawActorMicroRect(x + 5.33, y + 12.33, 6.33, .33, "#34131d");
+        drawActorMicroRect(x + 8.33, y + 17.33, 3.33, .33, "#c85e69");
         ctx.fillStyle = "#24212a";
         ctx.fillRect(x + 3, y, 12, 7);
         ctx.fillStyle = "#111016";
@@ -904,10 +935,12 @@
         ctx.fillRect(x + (e.vx > 0 ? 12 : 3), y + 3, 2, 2);
         ctx.fillStyle = "#fff0b8";
         ctx.fillRect(x + (e.vx > 0 ? 13 : 3), y + 3.5, .5, .5);
+        drawActorMicroRect(x + (e.vx > 0 ? 12.33 : 3.33), y + 4.33, .67, .33, "#3c261b");
         ctx.fillStyle = "#9aa0a5";
         ctx.fillRect(x + (e.vx > 0 ? 14 : -6), y + 10, 10, 2);
         ctx.fillStyle = "#d5dde4";
         ctx.fillRect(x + (e.vx > 0 ? 15 : -5), y + 9.5, 8, .5);
+        drawActorMicroRect(x + (e.vx > 0 ? 16.33 : -4.33), y + 10.67, 6, .33, "#f7ffff");
       }
 
       function drawBoss() {
@@ -925,6 +958,9 @@
         ctx.fillRect(x + 12.5, y + 21.5, 22, .5);
         ctx.fillRect(x + 13.5, y + 27.5, 18, .5);
         ctx.fillRect(x + 15.5, y + 34.5, 17, .5);
+        drawActorMicroRect(x + 12.33, y + 23.33, 20.33, .33, pulse ? "#ffffff" : "#8f7b5b");
+        drawActorMicroRect(x + 15.33, y + 30.33, 17.33, .33, "#3b2d22");
+        drawActorMicroRect(x + 18.33, y + 39.33, 10.33, .33, "#18100d");
         ctx.fillStyle = "#2b221c";
         ctx.fillRect(x + 6, y + 20, 8, 24);
         ctx.fillRect(x + 34, y + 20, 8, 24);
@@ -956,15 +992,24 @@
         ctx.fillStyle = "#e0b28d";
         ctx.fillRect(x + 16.5, y + 11, 13, .5);
         ctx.fillRect(x + 18, y + 20.5, 10, .5);
+        drawActorMicroRect(x + 17.33, y + 12.33, 4.67, .33, "#f2c59e");
+        drawActorMicroRect(x + 25.33, y + 12.33, 4.67, .33, "#f2c59e");
+        drawActorMicroRect(x + 23.33, y + 15.67, .33, 3.33, "#77513f");
+        drawActorMicroRect(x + 20.33, y + 21.33, 7, .33, "#5d332b");
         ctx.fillStyle = "#141414";
         ctx.fillRect(x + 13, y + 8, 23, 3);
         ctx.fillRect(x + 17, y + 3, 15, 4);
+        drawActorMicroRect(x + 14.33, y + 8.33, 20.33, .33, "#2d2424");
+        drawActorMicroRect(x + 18.33, y + 3.33, 11.33, .33, "#332928");
         ctx.fillStyle = "#e9d7bc";
         ctx.fillRect(x + 15, y + 14, 7, 3);
         ctx.fillRect(x + 25, y + 14, 7, 3);
         ctx.fillStyle = "#2f3337";
         ctx.fillRect(x + 17, y + 15, 2, 1);
         ctx.fillRect(x + 27, y + 15, 2, 1);
+        drawActorMicroRect(x + 15.33, y + 13.67, 7.33, .33, "#ffffff");
+        drawActorMicroRect(x + 25.33, y + 13.67, 7.33, .33, "#ffffff");
+        drawActorMicroRect(x + 21.67, y + 14.33, 2.67, .33, "#89827d");
         ctx.fillStyle = "#645b55";
         ctx.fillRect(x + 14, y + 13, 9, 1);
         ctx.fillRect(x + 24, y + 13, 9, 1);
@@ -988,10 +1033,12 @@
           ctx.fillRect(x + (boss.dir > 0 ? 58 : -19), y + 21, 9, 10);
           ctx.fillStyle = "#e2e8eb";
           ctx.fillRect(x + (boss.dir > 0 ? 40 : -15), y + 25.5, 24, .5);
+          drawActorMicroRect(x + (boss.dir > 0 ? 41.33 : -14.33), y + 27.33, 21.33, .33, "#ffffff");
         } else {
           ctx.fillRect(x + (boss.dir > 0 ? 35 : -12), y + 30, 18, 4);
           ctx.fillStyle = "#e2e8eb";
           ctx.fillRect(x + (boss.dir > 0 ? 36 : -11), y + 29.5, 15, .5);
+          drawActorMicroRect(x + (boss.dir > 0 ? 36.33 : -10.67), y + 31.33, 13.33, .33, "#ffffff");
         }
       }
 
@@ -1046,7 +1093,7 @@
           ctx.fillRect(338 + i * 12, 8, 8, 8);
         }
         ctx.fillStyle = "#a7b4c8";
-        ctx.fillText("16:9 852x480", 172, 15);
+        ctx.fillText("16:9 1278x720", 172, 15);
         if (boss.awake && !boss.dead) {
           ctx.fillStyle = "#0b0d12";
           ctx.fillRect(126, 26, 174, 8);
