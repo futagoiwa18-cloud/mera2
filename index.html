@@ -134,6 +134,7 @@
       const LEVEL_W = 2420;
       const keys = Object.create(null);
       const pressed = Object.create(null);
+      const released = Object.create(null);
 
       const solid = [
         { x: 0, y: 214, w: 520, h: 42 },
@@ -360,24 +361,20 @@
           }
         }
 
-        if (pressed.attack && player.attack <= 0) {
-          player.attack = 16;
-          player.slash = 10;
-          player.longSlash = 0;
-          audio.play("slash");
-        }
-
         if (keys.attack) {
           player.attackHold++;
-          if (player.attackHold >= 22 && !player.longAttackUsed) {
-            player.attack = 24;
-            player.slash = 14;
-            player.longSlash = 14;
-            player.longAttackUsed = true;
-            makeSpark(player.x + player.w / 2, player.y + 18, "#f7f0b8");
-            audio.play("slash");
-          }
-        } else {
+        }
+
+        if (released.attack && player.attack <= 0) {
+          const charged = player.attackHold >= 22;
+          player.attack = charged ? 24 : 16;
+          player.slash = charged ? 14 : 10;
+          player.longSlash = charged ? 14 : 0;
+          if (charged) makeSpark(player.x + player.w / 2, player.y + 18, "#f7f0b8");
+          audio.play("slash");
+          player.attackHold = 0;
+          player.longAttackUsed = false;
+        } else if (!keys.attack && !released.attack) {
           player.attackHold = 0;
           player.longAttackUsed = false;
         }
@@ -868,7 +865,14 @@
         if (player.inv && Math.floor(time / 4) % 2) return;
         const x = Math.round(player.x - camera);
         const y = Math.round(player.y);
-        const run = Math.abs(player.vx) > .35 && player.grounded ? Math.floor(time / 6) % 2 : 0;
+        const running = Math.abs(player.vx) > .35 && player.grounded;
+        const runCycle = running ? Math.floor(time / 5) % 4 : 0;
+        const run = running ? (runCycle % 2) : 0;
+        const runLean = running ? 2 * player.dir : 0;
+        const armSwing = running ? (runCycle < 2 ? -2 : 2) : 0;
+        const backArmSwing = -armSwing;
+        const frontLegLift = running ? (runCycle < 2 ? -2 : 1) : 0;
+        const backLegLift = running ? (runCycle < 2 ? 1 : -2) : 0;
         const lean = player.grounded ? 0 : -2;
         const faceX = player.dir > 0 ? x + 14 : x + 8;
         const scabbardX = player.dir > 0 ? x + 3 : x + 18;
@@ -881,6 +885,7 @@
         ctx.translate(x, y + player.h);
         ctx.scale(spriteScale, spriteScale);
         ctx.translate(-x, -(y + spriteH));
+        if (running) ctx.translate(runLean, 0);
 
         ctx.fillStyle = "rgba(0,0,0,.45)";
         ctx.fillRect(x + 1, y + 46, 27, 3);
@@ -995,32 +1000,32 @@
           ctx.fillRect(x + (player.dir > 0 ? 2 : 24), armY + 11, 5, 3);
         } else {
           ctx.fillStyle = "#252c35";
-          ctx.fillRect(x + 1, armY, 6, 12);
-          ctx.fillRect(x + 23, armY, 5, 12);
+          ctx.fillRect(x + 1, armY + backArmSwing, 6, 12);
+          ctx.fillRect(x + 23, armY + armSwing, 5, 12);
           ctx.fillStyle = "#11141a";
-          ctx.fillRect(x + 1, armY + 8, 6, 4);
-          ctx.fillRect(x + 23, armY + 8, 5, 4);
+          ctx.fillRect(x + 1, armY + 8 + backArmSwing, 6, 4);
+          ctx.fillRect(x + 23, armY + 8 + armSwing, 5, 4);
           ctx.fillStyle = "#a66e3e";
-          ctx.fillRect(x + 2, armY + 11, 4, 3);
-          ctx.fillRect(x + 24, armY + 11, 4, 3);
+          ctx.fillRect(x + 2, armY + 11 + backArmSwing, 4, 3);
+          ctx.fillRect(x + 24, armY + 11 + armSwing, 4, 3);
           ctx.fillStyle = "#0b0c10";
-          ctx.fillRect(x + 2, armY + 14, 5, 2);
-          ctx.fillRect(x + 24, armY + 14, 5, 2);
+          ctx.fillRect(x + 2, armY + 14 + backArmSwing, 5, 2);
+          ctx.fillRect(x + 24, armY + 14 + armSwing, 5, 2);
         }
 
         // Baggy pants and boots.
         ctx.fillStyle = "#202630";
-        ctx.fillRect(x + 6, y + 39, 8, 8 - run);
-        ctx.fillRect(x + 15, y + 39 + run, 8, 8 - run);
+        ctx.fillRect(x + 6 - (running ? 1 : 0), y + 39 + frontLegLift, 8, 8 - run);
+        ctx.fillRect(x + 15 + (running ? 1 : 0), y + 39 + backLegLift, 8, 8 - run);
         ctx.fillStyle = "#303844";
-        ctx.fillRect(x + 7, y + 40, 5, 1);
-        ctx.fillRect(x + 16, y + 40 + run, 5, 1);
+        ctx.fillRect(x + 7 - (running ? 1 : 0), y + 40 + frontLegLift, 5, 1);
+        ctx.fillRect(x + 16 + (running ? 1 : 0), y + 40 + backLegLift, 5, 1);
         ctx.fillStyle = "#0b0d11";
-        ctx.fillRect(x + 5, y + 46, 9, 3);
-        ctx.fillRect(x + 15, y + 46, 10, 3);
+        ctx.fillRect(x + 5 - (running ? 2 : 0), y + 46 + Math.max(0, frontLegLift), 9, 3);
+        ctx.fillRect(x + 15 + (running ? 2 : 0), y + 46 + Math.max(0, backLegLift), 10, 3);
         ctx.fillStyle = "#3f4550";
-        ctx.fillRect(x + 7, y + 47, 5, 1);
-        ctx.fillRect(x + 17, y + 47, 6, 1);
+        ctx.fillRect(x + 7 - (running ? 2 : 0), y + 47 + Math.max(0, frontLegLift), 5, 1);
+        ctx.fillRect(x + 17 + (running ? 2 : 0), y + 47 + Math.max(0, backLegLift), 6, 1);
 
         if (player.slash > 0) {
           ctx.fillStyle = "#f7f0b8";
@@ -1263,6 +1268,7 @@
 
       function clearPressed() {
         for (const k in pressed) pressed[k] = false;
+        for (const k in released) released[k] = false;
       }
 
       function loop() {
@@ -1294,7 +1300,10 @@
 
       window.addEventListener("keyup", (e) => {
         const k = map[e.code];
-        if (k) keys[k] = false;
+        if (k) {
+          if (k === "attack") released.attack = true;
+          keys[k] = false;
+        }
       });
 
       for (const button of document.querySelectorAll("button[data-key]")) {
@@ -1307,6 +1316,7 @@
         };
         const up = (e) => {
           e.preventDefault();
+          if (k === "attack") released.attack = true;
           keys[k] = false;
         };
         button.addEventListener("pointerdown", down);
